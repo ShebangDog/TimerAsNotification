@@ -2,7 +2,9 @@ package dog.shebang.timer
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -18,11 +20,18 @@ class MainActivity : AppCompatActivity() {
 
         createNotificationChannel()
 
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+
         val builder = NotificationCompat.Builder(this, CHANNEL_ID).apply {
             setSmallIcon(R.drawable.ic_launcher_foreground)
             setContentTitle("TEST NOTIFICATION TITLE")
             setContentText("test notification content")
             setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            setContentIntent(pendingIntent)
+            setAutoCancel(true)
         }
 
         with(NotificationManagerCompat.from(this)) {
