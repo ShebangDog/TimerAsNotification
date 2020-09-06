@@ -6,11 +6,14 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock
+import android.widget.RemoteViews
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import dog.shebang.timer.Constants.CHANNEL_ID
 import dog.shebang.timer.databinding.ActivityMainBinding
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -37,8 +40,6 @@ class MainActivity : AppCompatActivity() {
 
         val builder = NotificationCompat.Builder(this, CHANNEL_ID).apply {
             setSmallIcon(R.drawable.ic_launcher_foreground)
-            setContentTitle("TEST NOTIFICATION TITLE")
-            setContentText("test notification content")
             setPriority(NotificationCompat.PRIORITY_DEFAULT)
             setContentIntent(pendingIntent)
             setAutoCancel(true)
@@ -49,6 +50,7 @@ class MainActivity : AppCompatActivity() {
 
             notify(notificationId, builder.build())
         }
+
     }
 
     private fun createNotificationChannel() {
