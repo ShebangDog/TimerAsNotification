@@ -38,7 +38,14 @@ class MainActivity : AppCompatActivity() {
         }
         val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
+        val customView = RemoteViews(packageName, R.layout.custom_notification).apply {
+            setChronometer(R.id.chronometer, SystemClock.elapsedRealtime(), null, true)
+            setTextViewText(R.id.title, "Test Notification")
+            setImageViewResource(R.id.image, R.mipmap.ic_launcher)
+        }
+
         val builder = NotificationCompat.Builder(this, CHANNEL_ID).apply {
+            setCustomContentView(customView)
             setSmallIcon(R.drawable.ic_launcher_foreground)
             setPriority(NotificationCompat.PRIORITY_DEFAULT)
             setContentIntent(pendingIntent)
