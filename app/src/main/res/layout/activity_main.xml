@@ -23,7 +23,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/stop_button"
-        app:layout_constraintTop_toBottomOf="@id/chronometer" />
+        app:layout_constraintTop_toBottomOf="@id/chronometer_in_activity" />
 
     <Button
         android:id="@+id/stop_button"
@@ -33,6 +33,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/start_button"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/chronometer" />
+        app:layout_constraintTop_toBottomOf="@id/chronometer_in_activity" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

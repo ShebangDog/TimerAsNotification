@@ -25,13 +25,13 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        createNotificationChannel()
-
         customView = RemoteViews(packageName, R.layout.custom_notification).apply {
-            setChronometer(R.id.chronometer, SystemClock.elapsedRealtime(), null, false)
+            setChronometer(R.id.chronometer_on_notification, SystemClock.elapsedRealtime(), null, true)
             setTextViewText(R.id.title, "Test Notification")
             setImageViewResource(R.id.image, R.mipmap.ic_launcher)
         }
+
+        createNotificationChannel()
 
         val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
