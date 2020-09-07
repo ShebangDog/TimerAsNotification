@@ -13,10 +13,12 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import dog.shebang.timer.Constants.CHANNEL_ID
 import dog.shebang.timer.databinding.ActivityMainBinding
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var customView: RemoteViews
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,24 +27,16 @@ class MainActivity : AppCompatActivity() {
 
         createNotificationChannel()
 
-        binding.apply {
-
+        customView = RemoteViews(packageName, R.layout.custom_notification).apply {
+            setChronometer(R.id.chronometer, SystemClock.elapsedRealtime(), null, false)
+            setTextViewText(R.id.title, "Test Notification")
+            setImageViewResource(R.id.image, R.mipmap.ic_launcher)
         }
-    }
-
-    override fun onStop() {
-        super.onStop()
 
         val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
-
-        val customView = RemoteViews(packageName, R.layout.custom_notification).apply {
-            setChronometer(R.id.chronometer, SystemClock.elapsedRealtime(), null, true)
-            setTextViewText(R.id.title, "Test Notification")
-            setImageViewResource(R.id.image, R.mipmap.ic_launcher)
-        }
 
         val builder = NotificationCompat.Builder(this, CHANNEL_ID).apply {
             setCustomContentView(customView)
@@ -58,6 +52,16 @@ class MainActivity : AppCompatActivity() {
             notify(notificationId, builder.build())
         }
 
+        binding.apply {
+
+            startButton.setOnClickListener {
+                customView.setChronometer(R.id.chronometer_on_notification, SystemClock.elapsedRealtime(), null, true)
+            }
+
+            stopButton.setOnClickListener {
+                customView.setChronometer(R.id.chronometer_on_notification, SystemClock.elapsedRealtime(), null, false)
+            }
+        }
     }
 
     private fun createNotificationChannel() {

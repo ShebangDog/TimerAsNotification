@@ -22,7 +22,7 @@
         android:textSize="13dp" />
 
     <Chronometer
-        android:id="@+id/chronometer"
+        android:id="@+id/chronometer_on_notification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
@@ -30,4 +30,5 @@
         android:text="Testing is awecome"
         android:textColor="#000"
         android:textSize="13dp" />
+
 </RelativeLayout>
