@@ -13,7 +13,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import dog.shebang.timer.Constants.CHANNEL_ID
 import dog.shebang.timer.databinding.ActivityMainBinding
-import dog.shebang.timer.databinding.CustomNotificationBinding
 
 
 class MainActivity : AppCompatActivity() {
@@ -60,6 +59,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.apply {
+            val startedTime = SystemClock.elapsedRealtime()
 
             startButton.setOnClickListener {
                 with(NotificationManagerCompat.from(this@MainActivity)) {
@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
                     val customViewForStarting = customView.apply {
                         setChronometer(
                             R.id.chronometer_on_notification,
-                            SystemClock.elapsedRealtime(),
+                            startedTime,
                             null,
                             true
                         )
@@ -80,6 +80,9 @@ class MainActivity : AppCompatActivity() {
 
                     notify(notificationId, builderForStarting.build())
                 }
+
+                timeTextView.text = ((SystemClock.elapsedRealtime() - startedTime) / 1000).toString()
+
             }
 
             stopButton.setOnClickListener {
@@ -89,7 +92,7 @@ class MainActivity : AppCompatActivity() {
                     val customViewForStopping = customView.apply {
                         setChronometer(
                             R.id.chronometer_on_notification,
-                            SystemClock.elapsedRealtime(),
+                            startedTime,
                             null,
                             false
                         )
