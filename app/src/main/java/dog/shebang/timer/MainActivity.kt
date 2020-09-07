@@ -13,22 +13,37 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import dog.shebang.timer.Constants.CHANNEL_ID
 import dog.shebang.timer.databinding.ActivityMainBinding
-import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var customView: RemoteViews
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        customView = RemoteViews(packageName, R.layout.custom_notification).apply {
-            setChronometer(R.id.chronometer_on_notification, SystemClock.elapsedRealtime(), null, true)
+        val customView = RemoteViews(packageName, R.layout.custom_notification).apply {
             setTextViewText(R.id.title, "Test Notification")
             setImageViewResource(R.id.image, R.mipmap.ic_launcher)
+        }
+
+        val customViewForStarting = customView.apply {
+            setChronometer(
+                R.id.chronometer_on_notification,
+                SystemClock.elapsedRealtime(),
+                null,
+                true
+            )
+        }
+
+        val customViewForStopping = customView.apply {
+            setChronometer(
+                R.id.chronometer_on_notification,
+                SystemClock.elapsedRealtime(),
+                null,
+                false
+            )
         }
 
         createNotificationChannel()
@@ -39,27 +54,46 @@ class MainActivity : AppCompatActivity() {
         val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
         val builder = NotificationCompat.Builder(this, CHANNEL_ID).apply {
-            setCustomContentView(customView)
             setSmallIcon(R.drawable.ic_launcher_foreground)
             setPriority(NotificationCompat.PRIORITY_DEFAULT)
             setContentIntent(pendingIntent)
             setAutoCancel(true)
         }
 
-        with(NotificationManagerCompat.from(this)) {
+        with(NotificationManagerCompat.from(this@MainActivity)) {
             val notificationId = 1
 
-            notify(notificationId, builder.build())
+            val builderForStopping = builder.apply {
+                setCustomContentView(customViewForStopping)
+            }
+
+            notify(notificationId, builderForStopping.build())
         }
 
         binding.apply {
 
             startButton.setOnClickListener {
-                customView.setChronometer(R.id.chronometer_on_notification, SystemClock.elapsedRealtime(), null, true)
+                with(NotificationManagerCompat.from(this@MainActivity)) {
+                    val notificationId = 1
+
+                    val builderForStarting = builder.apply {
+                        setCustomContentView(customViewForStarting)
+                    }
+
+                    notify(notificationId, builderForStarting.build())
+                }
             }
 
             stopButton.setOnClickListener {
-                customView.setChronometer(R.id.chronometer_on_notification, SystemClock.elapsedRealtime(), null, false)
+                with(NotificationManagerCompat.from(this@MainActivity)) {
+                    val notificationId = 1
+
+                    val builderForStopping = builder.apply {
+                        setCustomContentView(customViewForStopping)
+                    }
+
+                    notify(notificationId, builderForStopping.build())
+                }
             }
         }
     }
